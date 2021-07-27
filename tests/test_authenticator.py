@@ -618,13 +618,16 @@ class TestCreateUser(unittest.TestCase):
         a = SAMLAuthenticator()
         a._optional_user_add = MagicMock()
         a._optional_user_add.return_value = True
+        # Necessary because JH didn't version their software properly.
         a.whitelist = {'bluedata'}
+        a.allowed_users = {'bluedata'}
 
         assert a._check_username_and_add_user('bluedata')
 
         a._optional_user_add.assert_called_once_with('bluedata')
 
         a.whitelist = {'not_bluedata'}
+        a.allowed_users = {'not_bluedata'}
         a._optional_user_add.reset_mock()
 
         assert not a._check_username_and_add_user('bluedata')
@@ -635,13 +638,16 @@ class TestCreateUser(unittest.TestCase):
         a = SAMLAuthenticator()
         a._optional_user_add = MagicMock()
         a._optional_user_add.return_value = True
+        # Necessary because JH didn't version their software properly.
         a.blacklist = {'bluedata'}
+        a.blocked_users = {'bluedata'}
 
         assert not a._check_username_and_add_user('bluedata')
 
         a._optional_user_add.assert_not_called()
 
         a.blacklist = {'not_bluedata'}
+        a.blocked_users = {'not_bluedata'}
 
         assert a._check_username_and_add_user('bluedata')
 
